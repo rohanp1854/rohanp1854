@@ -1,0 +1,516 @@
+Yes. Here is the **complete setup I recommend**, using the currently supported `Platane/snk/svg-only@v3` generator and `crazy-max/ghaction-github-pages@v5`. The snake project officially supports light/dark SVG outputs, and the deployment action's current release is v5.0.0. ([GitHub][1])
+
+GitHub will display the profile README only when the public repository name exactly matches your username and the repository has a non-empty `README.md` in its root. ([GitHub Docs][2])
+
+## 1. Exact repository structure
+
+Replace `YOUR_USERNAME` with your **actual GitHub username**.
+
+```text
+YOUR_USERNAME/
+│
+├── .github/
+│   └── workflows/
+│       └── snake.yml
+│
+└── README.md
+```
+
+After the Action runs successfully, GitHub will also create/update:
+
+```text
+YOUR_USERNAME/
+│
+├── .github/
+│   └── workflows/
+│       └── snake.yml
+│
+├── README.md
+│
+└── output/
+    ├── github-snake.svg
+    └── github-snake-dark.svg
+```
+
+You **do not create the `output` folder manually**. The workflow generates it and pushes the files there.
+
+---
+
+# 2. Create the profile repository
+
+On GitHub:
+
+```text
+New repository
+```
+
+Repository name:
+
+```text
+YOUR_USERNAME
+```
+
+For example:
+
+```text
+rohanpawar
+```
+
+Set it to:
+
+```text
+Public
+```
+
+GitHub specifically requires the profile repository to be public and named exactly after the username. ([GitHub Docs][2])
+
+---
+
+# 3. Create `.github/workflows/snake.yml`
+
+Create this exact path:
+
+```text
+.github/workflows/snake.yml
+```
+
+Put this inside:
+
+```yaml
+name: Generate Contribution Snake
+
+on:
+  schedule:
+    # Every day at 00:00 UTC = 05:30 IST
+    - cron: "0 0 * * *"
+
+  # Allows you to run it manually
+  workflow_dispatch:
+
+  # Also regenerate whenever the profile repo is updated
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    name: Generate snake animation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Generate contribution snake
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/github-snake.svg
+            dist/github-snake-dark.svg?palette=github-dark
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish generated files
+        uses: crazy-max/ghaction-github-pages@v5
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+This follows the current `snk` interface: `github_user_name` is required, `svg-only@v3` can generate the SVGs, and the dark palette can be requested through the output query string. ([GitHub][3])
+
+The deployment action supports `target_branch` and `build_dir`, which is why the generated files go into the `output` branch instead of cluttering your main branch. ([GitHub][4])
+
+---
+
+# 4. Final `README.md`
+
+Replace **every `YOUR_USERNAME`** below with your actual username.
+
+For example, if your username is `rohanpawar`, use `rohanpawar` everywhere.
+
+````markdown
+<div align="center">
+
+# 👋 Hey, I'm Rohan Pawar
+
+### CSE Student • Problem Solver • Software Builder
+
+<img
+  src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=21&pause=1000&center=true&vCenter=true&width=760&lines=Learning+DSA+with+C%2B%2B;Building+real-world+software;Exploring+Full-Stack+Development;Learning+Go%2C+Linux+%26+Docker;Turning+ideas+into+working+projects"
+  alt="Typing SVG"
+/>
+
+<br>
+
+<a href="https://github.com/YOUR_USERNAME">
+  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
+</a>
+<a href="https://www.linkedin.com/in/YOUR_LINKEDIN">
+  <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
+</a>
+
+</div>
+
+---
+
+## 🧠 Who I Am
+
+I'm a Computer Science student focused on becoming a strong software engineer
+through **problem solving, systems thinking and building real software**.
+
+I don't want to learn technologies just to collect them.
+
+I want to understand:
+
+```text
+Problem
+   ↓
+Algorithm
+   ↓
+Code
+   ↓
+Architecture
+   ↓
+Database
+   ↓
+Deployment
+   ↓
+Real Users
+````
+
+---
+
+## ⚡ What I'm Working On
+
+| Area                       | Focus                              |
+| -------------------------- | ---------------------------------- |
+| 🧠 DSA                     | C++ • Algorithms • Problem Solving |
+| 🌐 Frontend                | HTML • CSS • JavaScript • React    |
+| ⚙️ Backend                 | Node.js • Go                       |
+| 🗄️ Database               | PostgreSQL                         |
+| 🐧 Systems                 | Linux                              |
+| 🐳 Infrastructure          | Docker                             |
+| 🏆 Competitive Programming | CodeChef • Codeforces • ICPC       |
+| 🚀 Projects                | Real-world & hackathon software    |
+
+---
+
+## 🛠️ Technology Stack
+
+### Languages
+
+<p>
+  <img src="https://skillicons.dev/icons?i=cpp,c,js,go" />
+</p>
+
+### Web
+
+<p>
+  <img src="https://skillicons.dev/icons?i=html,css,react,nodejs" />
+</p>
+
+### Database & Infrastructure
+
+<p>
+  <img src="https://skillicons.dev/icons?i=postgres,docker,linux,git,github" />
+</p>
+
+---
+
+## 🚀 What I'm Building
+
+### 🚌 RideSRS — Bus Booking System
+
+A bus seat-booking project focused on implementing an actual booking workflow,
+seat availability and menu-driven interaction.
+
+**Tech:** C
+
+---
+
+### 🧩 Hackathon Projects
+
+I am interested in building software that addresses real-world problems rather
+than only creating demonstration CRUD applications.
+
+**Areas:** AI • Backend • Databases • APIs • Docker • Software Architecture
+
+---
+
+## 🧠 Problem Solving
+
+Competitive programming is one of the ways I train my ability to:
+
+```text
+Understand the problem
+        ↓
+Find the pattern
+        ↓
+Choose the data structure
+        ↓
+Design the algorithm
+        ↓
+Analyze complexity
+        ↓
+Implement
+        ↓
+Debug
+        ↓
+Improve
+```
+
+### Coding Profiles
+
+<a href="YOUR_CODECHEF">
+  <img src="https://img.shields.io/badge/CodeChef-5B4638?style=for-the-badge&logo=codechef&logoColor=white" />
+</a>
+<a href="YOUR_CODEFORCES">
+  <img src="https://img.shields.io/badge/Codeforces-1F8ACB?style=for-the-badge&logo=codeforces&logoColor=white" />
+</a>
+<a href="YOUR_LEETCODE">
+  <img src="https://img.shields.io/badge/LeetCode-FFA116?style=for-the-badge&logo=leetcode&logoColor=black" />
+</a>
+
+---
+
+## 🔭 My Engineering Direction
+
+```text
+               C++ + DSA
+                   │
+                   ▼
+          Strong Problem Solving
+                   │
+                   ▼
+            Full-Stack Web
+                   │
+             ┌─────┴─────┐
+             ▼           ▼
+          Node.js       Go
+             │           │
+             └─────┬─────┘
+                   ▼
+              PostgreSQL
+                   │
+                   ▼
+             Linux + Docker
+                   │
+                   ▼
+          Production Software
+```
+
+My goal is to gradually move from **writing code**
+to **engineering complete systems**.
+
+---
+
+## 📈 GitHub Activity
+
+<div align="center">
+
+<img
+src="https://github-readme-stats.vercel.app/api?username=YOUR_USERNAME&show_icons=true&hide_border=true&rank_icon=github&theme=github_dark"
+height="170"
+/>
+
+<img
+src="https://github-readme-stats.vercel.app/api/top-langs/?username=YOUR_USERNAME&layout=compact&hide_border=true&theme=github_dark"
+height="170"
+/>
+
+<br><br>
+
+<img
+src="https://streak-stats.demolab.com?user=YOUR_USERNAME&theme=github-dark-blue&hide_border=true"
+alt="GitHub Streak"
+/>
+
+</div>
+
+---
+
+## 🐍 Contribution Journey
+
+<div align="center">
+
+<picture>
+  <source
+    media="(prefers-color-scheme: dark)"
+    srcset="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_USERNAME/output/github-snake-dark.svg"
+  />
+
+<source
+ media="(prefers-color-scheme: light)"
+ srcset="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_USERNAME/output/github-snake.svg"
+/>
+
+<img
+ alt="GitHub Contribution Snake"
+ src="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_USERNAME/output/github-snake.svg"
+/> </picture>
+
+</div>
+
+---
+
+## 🎯 The Build Loop
+
+```text
+LEARN
+  ↓
+BUILD
+  ↓
+BREAK
+  ↓
+DEBUG
+  ↓
+UNDERSTAND
+  ↓
+IMPROVE
+  ↓
+SHIP
+```
+
+### I'm not trying to know everything.
+
+### I'm trying to become very good at learning, solving and building.
+
+---
+
+<div align="center">
+
+### 🚀 Keep building.
+
+<img
+src="https://komarev.com/ghpvc/?username=YOUR_USERNAME&style=flat-square"
+alt="Profile Views"
+/>
+
+</div>
+```
+
+---
+
+# 5. The most important part: run the Action
+
+After committing `snake.yml`:
+
+Go to:
+
+```text
+YOUR_USERNAME repository
+        ↓
+Actions
+        ↓
+Generate Contribution Snake
+        ↓
+Run workflow
+        ↓
+Run workflow
+```
+
+The workflow has `workflow_dispatch`, so it can be started manually, in addition to its daily scheduled run. ([GitHub][5])
+
+The workflow's `contents: write` permission allows it to publish the generated SVGs into the `output` branch using the repository's built-in `GITHUB_TOKEN`; no personal access token is required for this same-repository setup. The deployment action documents `GITHUB_TOKEN` and `target_branch`/`build_dir` usage. ([GitHub][4])
+
+---
+
+# 6. Your final repository will look like this
+
+```text
+rohanpawar/
+│
+├── .github/
+│   └── workflows/
+│       └── snake.yml
+│
+├── README.md
+│
+└── output/
+    ├── github-snake.svg
+    └── github-snake-dark.svg
+```
+
+And your profile becomes:
+
+```text
+┌──────────────────────────────────────────────┐
+│              👋 Hey, I'm Rohan               │
+│                                              │
+│       CSE Student • Software Builder         │
+│                                              │
+│       > Learning DSA with C++                │
+│       > Building real-world software         │
+│       > Exploring Full Stack                 │
+│                                              │
+├──────────────────────────────────────────────┤
+│ 🧠 WHO I AM                                 │
+├──────────────────────────────────────────────┤
+│ ⚡ CURRENT FOCUS                             │
+├──────────────────────────────────────────────┤
+│ 🛠️ TECHNOLOGY STACK                         │
+├──────────────────────────────────────────────┤
+│ 🚀 PROJECTS                                  │
+├──────────────────────────────────────────────┤
+│ 🧠 PROBLEM SOLVING                           │
+├──────────────────────────────────────────────┤
+│ 📈 GITHUB ACTIVITY                           │
+│                                              │
+│        Stats        Languages                │
+│        Streak       🔥                       │
+│                                              │
+├──────────────────────────────────────────────┤
+│ 🐍 CONTRIBUTION JOURNEY                      │
+│                                              │
+│       🟩 🟩 🟩 🟩 🐍 🟩 🟩                   │
+│       🟩 🟩 🐍 🐍 🐍 🟩 🟩                   │
+│       🟩 🐍 🐍 🐍 🐍 🐍 🟩                   │
+│                                              │
+├──────────────────────────────────────────────┤
+│             🚀 KEEP BUILDING                 │
+└──────────────────────────────────────────────┘
+```
+
+### Two things to change before committing
+
+Use your actual values for:
+
+```text
+YOUR_USERNAME
+YOUR_LINKEDIN
+YOUR_CODECHEF
+YOUR_CODEFORCES
+YOUR_LEETCODE
+```
+
+And **don't add achievements you haven't actually earned**. That's what will make this profile strong rather than looking like a template.
+
+One technical note: the snake animation reflects your **real GitHub contribution graph**; it does not manufacture contributions. That's the core behavior of `snk`. ([GitHub][1])
+
+### If the Action fails
+
+Check:
+
+```text
+Repository
+→ Settings
+→ Actions
+→ General
+→ Workflow permissions
+→ Read and write permissions
+→ Save
+```
+
+Then run the workflow manually again. This permission setting is a common requirement when a workflow needs to push generated content back to the repository. ([GitHub][6])
+
+[1]: https://github.com/Platane/snk?utm_source=chatgpt.com "GitHub - Platane/snk: 🟩⬜ Generates a snake game from a github user contributions graph and output a screen capture as animated svg or gif · GitHub"
+[2]: https://docs.github.com/en/account-and-profile/how-tos/profile-customization/managing-your-profile-readme?utm_source=chatgpt.com "Managing your profile README - GitHub Docs"
+[3]: https://github.com/Platane/snk/blob/main/README.md?utm_source=chatgpt.com "snk/README.md at main · Platane/snk · GitHub"
+[4]: https://github.com/crazy-max/ghaction-github-pages?utm_source=chatgpt.com "GitHub - crazy-max/ghaction-github-pages: GitHub Action to deploy to GitHub Pages · GitHub"
+[5]: https://github.com/Platane/Platane/blob/master/.github/workflows/main.yml?utm_source=chatgpt.com "Platane/.github/workflows/main.yml at master · Platane/Platane · GitHub"
+[6]: https://github.com/orgs/community/discussions/161912?utm_source=chatgpt.com "How to add snk animation is GitHub README? · community · Discussion #161912 · GitHub"
