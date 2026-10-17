@@ -2,7 +2,7 @@
 
 # 👋 Hi, I'm Rohan Pawar
 
-### Competitive Programming | Web Development | Linux User | Open Source Explorer   
+### Competitive Programmer | Web Developer | Linux User | Open Source Explorer   
 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&pause=1000&center=true&vCenter=true&width=600&lines=Learning+DSA+with+C%2B%2B;Building+real-world+projects;Exploring+Full-Stack+Development;Learning+Go+%26+Docker" />
 
